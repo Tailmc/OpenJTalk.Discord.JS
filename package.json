@@ -19,7 +19,6 @@
     "@discordjs/opus": "^0.8.0",
     "@discordjs/voice": "^0.10.0",
     "@koozaki/romaji-conv": "^2.0.17",
-    "chokidar": "^3.5.3",
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
     "ffmpeg-static": "^4.4.1",
