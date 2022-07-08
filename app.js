@@ -1,5 +1,4 @@
 require('dotenv').config()
-const querystring = require("querystring");
 const discord = require("discord.js")
 const { Client, Intents } = require('discord.js');
 const { MessageEmbed } = require('discord.js');
@@ -7,7 +6,6 @@ const { joinVoiceChannel, createAudioPlayer, createAudioResource, getVoiceConnec
 const OpenJTalk = require('openjtalk');
 const { toHiragana, toKatakana } = require('@koozaki/romaji-conv');
 const fs = require('fs');
-const chokidar = require('chokidar')
 const hound = require('hound')
 const client = new Client({ intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_VOICE_STATES] });
 const data = fs.readFileSync('db.json', 'utf-8');
@@ -23,12 +21,10 @@ try {
             "Discord.js",
             "Dotenv",
             "FFMPEG-static",
-            "Express",
-            "Glob",
             "OpenJTalk",
             "Libsodium-wrappers",
-            "Querystring",
-            "@koozaki/romaji-conv"
+            "@koozaki/romaji-conv",
+            "Hound"
         ];
         console.log('reloaded');
         setInterval(() => {
@@ -104,7 +100,7 @@ try {
                 return;
             }
         }
-        if (command === "leave" && message.content.startsWith(prefix) && message.guild.me.channelId !== null) {
+        if (command === "leave" && message.content.startsWith(prefix) && message.guild.me.voice.channelId !== null) {
             const connection = getVoiceConnection(message.guild.id)
             connection.destroy();
             message.channel.send(":red_circle: Connection destroyed")
@@ -115,7 +111,7 @@ try {
                 return i.server === message.guildId
             })
             let currentchannel = current.channel
-            if (!message.content.startsWith(prefix) && !message.author.bot && currentchannel === message.channelId) {
+            if (!message.content.startsWith(prefix) && !message.content.startsWith('http') && !message.author.bot && currentchannel === message.channelId) {
                 mei.talk(toHiragana(message.content));
                 watcher.on('create', function(file, stats) {
                     const connection = getVoiceConnection(message.guild.id)
